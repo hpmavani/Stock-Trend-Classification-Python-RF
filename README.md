@@ -3,25 +3,79 @@
 ## Overview 
 Many individuals aim to invest their money in stocks and take advantage of the seemingly quick, but also risky way of making money. The movement of stock prices are impacted by so many factors such as crowd sentiment, world news, macroeconomic movement, and the intrinsic value of a company’s assets. Stock analysis is divided into two main categories: fundamental and technical analysis. Fundamental analysis focuses on the broader picture; it places an emphasis on a company’s financial records and market capitalization, while technical analysis focuses on creating an almost scientific method of stock prediction that’s based on patterns, trends, and momentum of a stock’s price. Keeping track of all the indicators and signals dictated in the technical analysis of a stock can be complex and time-consuming to do by hand, which is why machine learning techniques can be used to aid this process. Techniques such as Random Forest can essentially capture all these indicators and signals as features and classify the stock price as going up or down. This kind of classification offers investors a buy or sell signal from the technical perspective of stock prediction, which they can verify with real-world sentiments to help make decisions about entry and exit points for investments. 
 
-The dataset used to train and test the model is a dataset with the historical price data of the S&P500 to capture patterns consistent with the top 500 traded stocks in the United States.
+## Dataset
+The dataset used to train and test the model was sourced from Python's YFinance library with historical and most recent data on open, high, low, close, volume, and adjusted close prices for the S&P500 index to capture patterns consistent with the top 500 traded stocks in the United States. This included X rows and 7 columns. 
 
 This particular rendition of a stock trend classifier labels the training data with a 5-day lagged close price to simulate conditions for the moderately active home investor. If P(i) represents the most recent close on the i-th day then:
 
-P(i) - P([i-5]) > 0 indicates that the price has increased within the past 5 days. <br>
-P(i) - P([i-5]) <= 0 indicates that the price has decreased within the past 5 days.
+P(i) - P([i-5]) > 0 => label -> 1 indicates that the price has increased within the past 5 days. <br>
+P(i) - P([i-5]) <= 0 => label -> 0 indicates that the price has decreased within the past 5 days.
 
 Using this 5-day lag also helps the model filter out noise in the data that occurred from a 1-day lag close price, and the model performed significantly better with the increased lag, improving the accuracy by about 18%.
+
+The engineered features in consideration are several different indicators such as RSI, MACD, ADX, SMAs, and Bollinger Bands. The main algorithm used was Random Forest, which is one of the industry standards for classification in terms of accuracy and prevention of overfitting. This project makes use of many different data science skills such as wrangling and pre-processing, feature engineering, data exploration through plots and correlation matrices, and model analysis using metrics such as accuracy, precision, specificity, sensitivity, ROC curve, KFold cross-validation, and F1 score.  
+
+## Features
+
+### Simple Moving Average & Bollinger Bands
+The Simple Moving Average (SMA) is calculated with the formula (n is typically 14): 
+
+![image](https://github.com/user-attachments/assets/8e575462-b063-45da-b699-f826593cef35)
+
+Where pi indicates the close-price on the i-th day of the n-day period. 
+This indicates the averaged price movement of a stock and it’s particularly useful as a measure of central tendency. For instance, with the SMA, a Bollinger band can be created to mark out the approximate trading range of a stock’s prices. By taking 2 standard deviations above and below the SMA, a region of price variety is created, and a stock price that travels outside of the region – above the upper boundary of the Bollinger band or below the lower boundary of the Bollinger band – indicates an unusual fluctuation that can signal that it’s due for a correction that brings the price back up or down. 
+
+### RSI
+The RSI or the relative strength index is a momentum indicator that is calculated with the formula: <br>
+
+![image](https://github.com/user-attachments/assets/4c62e65e-50d9-4a07-bfcb-9eeee716e8a0)
+
+
+The average gain and loss are calculated over an n-day period, where n is usually 14 days. 
+The concept behind the RSI is that every stock has a trading range, and when a stock price reaches the bottom of its range, there will be a support force that pushes the stock price back. Contrarily, when the stock price reaches the top of its range, there’s a resistance force that pulls the stock price back down. The resistance level and support level of a stock’s trading range are measured by an RSI index of either 70 and 30 or 80 and 20 respectively. If a stock price touches the 70/80 mark, it indicates that the stock is overbought, and market forces will naturally bring the stock back down (trend reversal). If a stock price touches the 30/20 mark, it indicates that the stock is oversold, and market forces will naturally bring the stock back up. In other words, the RSI measures the likelihood of a trend reversal in context of the stock's current price momentum. 
+
+Instead of using static values such as 70/30 or 80/20, using a z-score for the RSI with rolling means and rolling standard deviations creates dynamic markers for when a stock price is oversold/overbought.
+
+### MACD
+MACD or the Moving Average Convergence Divergence Oscillator is another popular indicator used in technical analysis of the stock market. Essentially, it measures the momentum (the speed and direction) of price movements. The MACD indicator has two parts: the MACD and the signal. 
+The MACD value is calculated by subtracting the 12-Period and 26-Period EMA (exponential moving average) of the historical close prices. The former is a short-term moving average, and the latter is a long-term moving average, so the difference of the two provides more insight on the direction of the market. The exponential moving average is like the simple moving average, but it places more weight on the more recent data points in the timeseries data. 
+
+MACD = EMA (12) – EMA (26)
+
+![image](https://github.com/user-attachments/assets/e5e90025-97e5-4146-89f9-f9b4784315e6)
+
+The signal value is the 9-Period simple-moving average of the MACD line, and it’s used as a standard of comparison for the MACD. 
+
+The main points of interest with the MACD indicator are crossover points, where the MACD and Signal lines cross over each other, as well as the magnitude of the momentum at those points. Generally, when the MACD line is above the Signal line, this is a buy signal, and when the MACD line is below the Signal line, this is a sell signal. 
+
+### ADX, DMI+, DMI-, DI
+
+Some indicators that are used in conjunction with MACD are the average directional index (ADX), directional movement index plus and directional movement index minus. ADX identifies the existence of a stock trend, however it only provides the magnitude of the strength of a trend and not the direction. The directional movement (positive line DMI+) and directional movement (negative line DMI-) provide information about the direction of the trend. The overall directional index (DI) is calculated by taking the difference between the DMI+ and DMI-. When the DMI+ is above DMI-, the price is moving up. Conversely, when the DMI+ is below the DMI-, the price is moving down. 
+The ADX can be evaluated with these notions: 
+0-20	Absent or Weak Trend
+25-50	Strong Trend
+50-75	Very Strong Trend
+75-100	Extremely Strong Trend
+
+For example, a positive directional index (DMI+ > DMI-) and an ADX value of 45 indicates a strong uptrend. A negative directional index (DMI+ < DMI-) and an ADX value of 15 indicates a weak downtrend. 
+In this stock trend classification, the ADX and directional index are represented in one feature by multiplying the ADX by -1 if the directional index is negative (the DMI+ < DMI-); the ADX is kept positive if the directional index is positive (the DMI+ > DMI-). 
+
 
 ## Why Random Forest? (Advantages and Disadvantages)
 Random Forest Classification is an intuitive choice for stock bullish/bearish analysis because the strategies that many traders use can be condensed to a more qualitative decision tree. When analysts make decisions about a security, they filter through different signals and indicators, making often binary decisions about which technical or market conditions indicate a bullish or bearish move for a stock, before coming to a final conclusion (buy or sell). For example, a trader might first look at the RSI indicator and see that it has dipped below the 30-line indicating that it is oversold. They may also see that the ADX is greater than 15 and DMI+ is above the DMI- line, indicating that there is an uptrend forming. After looking at several other indicators, they will come to a conclusion of a certain confidence that there is a strong chance that the stock will go up. Decision trees in machine learning capture these decision points in a quantitative way, determining the best way to split each decision. If we go one step further, we can imagine that evaluating the opinion of 100 traders each with their own conclusion would result in a more reliable estimation of the "correct" classification of a stock. The intent behind Random Forest is exactly this, where 100 different decision trees each produce an outcome and the final prediction is determined on a majority vote basis. 
 
-Notice how these decisions can be represented in a tree. [insert tree]
+Notice how these decisions can be represented in a simplified tree. ![image](/images/Decision_Tree.png)
 
-Random Forest classification captures this same process with more mathematical derivations of decision making based on maintaining node purity. Each point of decision in a decision tree aims to create the largest disparity between labels. For example, there are 300 "bullish" data points and 20 "bearish" data points with RSI less than or equal to 40 vs. 200 "bearish" data points and 50 "bullish" data points with RSI greater than 40. This is identified as a determining split level because one side of the split has mostly bullish data points while the other side has mostly bearish data points. There is clearly some information being gained with this split.
+The numerical splits 30, 15, and 0 in the previous image are not arbitrarily assigned but are selected after maximizing the node purity at each split. Each point of decision in a decision tree aims to make every node as homogenous as possible (data points of mostly one label). Intuitively, it is deciding the factors that contribute to class labels being the most different. 
 
-Compare this to RSI less than 60 and greater than 60 which may separate 300 bullish data points and 100 bearish points from 100 bearish data points and 50 bullish data points. With this split, there is less purity in each side of the split -- a more heterogenous mixture of both classes in each node. This ambiguity suggests that the RSI being less than or greater than 60 isn't a deciding factor in classifying a data point as bullish or bearish. 
+![image](https://github.com/user-attachments/assets/d6ffefaa-3aee-400f-a1d6-3cb0750a7f8a)
 
-This idea is the essence of decision trees and the deterministic gini index, which is a measure of impurity (non-homogeneity of nodes). A decision tree aims to minimize the gini index at each decision point until it reaches the maximum depth which leaves a handful of samples in the leaf nodes. 
+
+This idea is mathematically represented with the Gini Index, which is a measure of impurity (non-homogeneity of nodes). The Gini Index ranges from 0 to 1, with 0 representing a pure dataset and 1 representing an impure dataset. A decision tree aims to minimize the gini index at each decision point until it reaches its maximum depth. <br>
+
+![image](https://github.com/user-attachments/assets/c6ad290f-7ae4-4aa3-bd5f-32e6050c415f)
+
+p(j) represents the probability of classifying as a class j, so adding these probabilities and subtracting from 1 give the probability of misclassifying a datapoint when it is randomly assigned to a class. You can extend this to feature selection in a decision tree. If we take appropriate test values (a, b, c, ..., z) for features X, Y, Z, we can calculate P(X = a), P(X = b), ..., for each feature and calculate the Gini Impurity for each value. If feature Y has the smallest Gini Impurity, we know that under random selection of a datapoint, it has the smallest chance of misclassification, making it the best feature for the decision tree. 
 
 Another important advantage of using Random Forest over just one decision tree besides having more than one "opinion" on a classification is how each tree is independent to one another because of feature subsetting and bagging. The decorrelation of trees is imperative in terms of avoid overfitting -- the model memorizes the noise of the data. 
 
@@ -36,24 +90,5 @@ Random Forest is computationally expensive. The more estimators (number of trees
 
 Random Forest is also black box. It's not feasible to see the different branches of each of 100s of decision trees, so a lot of this information isn't shown in detail while working with the Random Forest model. This makes it harder to tune and adjust the model. However, cross-validation is an efficient way to address this issue. 
 
-## Dataset
-The dataset used was a Kaggle Dataset with data on open, high, low, close, volume, and adjusted close prices for many stocks. The AAPL dataset was used for this project: www.kaggle.com/datasets/jacksoncrow/stock-market-dataset. Volatility index data was sourced from Python's YFinance (Yahoo Finance) library.
-
-## Methodology
-In this exploration of the applications of machine learning, I will focus on classifying the direction (up or down) of stocks, focusing on the stock price of Apple (AAPL). AAPL is known for its stability in the markets, which makes it a beneficial choice in this study in terms of reducing noise. The two classes are uptrend determined by 1 and downtrend determined by 0. These response variables are calculated by using a 5-day lag beteween close-prices: 
-Price_Difference = Price(i) - Price(i - 5) where i is the day in consideration. If Price_Difference is positive, this is counted as an uptrend; if negative, this is marked as a downtrend. Essentially, the model aims to see the general trend of a price over the next 5 days. This decision was made to reduce the noise that occurs when considering the price trend after just 1 day and smooth out the prices so the algorithm could perform better. 
-
-The features in consideration are several different indicators such as RSI, MACD, Williams %R, ADX, and Bollinger Bands. The main algorithm used was Random Forest, which is one of the industry standards for classification in terms of accuracy and prevention of overfitting. This project makes use of many different data science skills such as wrangling and pre-processing, feature engineering, data exploration through plots and correlation matrices, and model analysis using metrics such as accuracy, precision, specificity, sensitivity, and F1 score.  
-
 ## Results
-One of the evaluation methods used is the Out-Of-Bag Error (OOB Error), which allows Random Forests to perform its own validation while training the model. Approximately, each resampled dataset will contain 67% of the original data, so about 33% of the original dataset hasn’t been seen by each tree. This allows for that 33% of “out-of-bag” datapoints to be used as a validation set for each tree. The OOB error represents how many of the out-of-bag points were misclassified. This is important because it opens the door for cross-validation of tuning parameters based on the OOB Error. Below is the OOB error result from training the Random Forest model. The calculated OOB-Error is 15.28% indicating an 85% accuracy. 
 
-![image](https://github.com/user-attachments/assets/f6ca01da-e4d1-46bf-8848-ddd7411f62e9)
-
-Another validation set was used with more unseen data to offer more confidence in the model. The 'Positive Class' is the downtrend class (0). The results of the accuracy, sensitivity, specificity, precision (Positive Predictive Value), and F1 score (balanced accuracy) are also shown as well as the related confusion matrix. Comparing the accuracy to the base-line no-information rate, the accuracy with random guessing, there is a significant improvement, from 56.83% (base-line) to 81.93% with the model. The accuracy of the validation set compared to the accuracy determined by the OOB-error has a 3% difference (81.93% to 85%), which most likely means the model isn't overfitting the data. Additionally, the PPV shows that the model is better at classifying uptrends than downtrends. The detection rate is also really low compared to the rest of the metrics, showing that there needs to be improvement in terms of correctly predicting downtrends. 
-
-![image](https://github.com/user-attachments/assets/55b6f494-26e2-4a43-a518-9b3e2caca3cb)
-
-Feature importance showed that Williams %R, RSI, and the ADX & directional movement -- trend strength -- index features were the most important features in terms of contribution to accuracy and decrease of gini index when constructing the random forest model. 
-
-![image](https://github.com/user-attachments/assets/a159e28e-db76-4399-bca0-32b1f5cb320f)
