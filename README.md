@@ -104,6 +104,10 @@ The feature importances reveal that RSI Z-Score, Z-Score, RSI, and ADX contribut
 
 ![image](https://github.com/user-attachments/assets/0c2ed10d-9951-440a-b77f-f16a5677fd75)
 
+For further tuning of the model and also to determine the presence of overfitting, k-fold cross-validation was used where k was set to 10.
+
+The hyperparameters number of estimators and maximum features were tuned using grid_search which implements cross validation to find the best value for hyperparameters while validating the model. 
+
 
 
 
