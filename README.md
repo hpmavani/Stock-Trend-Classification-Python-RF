@@ -94,4 +94,16 @@ Random Forest is computationally expensive. The more estimators (number of trees
 Random Forest is also black box. It's not feasible to see the different branches of each of 100s of decision trees, so a lot of this information isn't shown in detail while working with the Random Forest model. This makes it harder to tune and adjust the model. However, cross-validation is an efficient way to address this issue. 
 
 ## Results
+The results of the Random Forest model's performance was evaluated with accuracy, f1-score, precision, and recall. 
+
+![image](https://github.com/user-attachments/assets/8629e7d3-94ee-4db8-a3c7-5d7b1f53a366)
+
+The feature importances reveal that RSI Z-Score, Z-Score, RSI, and ADX contributed the most to the model's accuracy. This also means these features reduced the Gini Index (promoted node purity) relatively more than the other features. 
+
+![image](https://github.com/user-attachments/assets/888526a1-0f62-4328-a008-96f134d4ed0f)
+
+![image](https://github.com/user-attachments/assets/0c2ed10d-9951-440a-b77f-f16a5677fd75)
+
+
+
 
