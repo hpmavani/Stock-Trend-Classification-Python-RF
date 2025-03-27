@@ -96,10 +96,10 @@ The main points of interest with the MACD indicator are crossover points, where 
 
 Some indicators that are used in conjunction with MACD are the average directional index (ADX), directional movement index plus and directional movement index minus. ADX identifies the existence of a stock trend, however it only provides the magnitude of the strength of a trend and not the direction. The directional movement (positive line DMI+) and directional movement (negative line DMI-) provide information about the direction of the trend. The overall directional index (DI) is calculated by taking the difference between the DMI+ and DMI-. When the DMI+ is above DMI-, the price is moving up. Conversely, when the DMI+ is below the DMI-, the price is moving down. 
 The ADX can be evaluated with these notions: 
-0-20	Absent or Weak Trend
-25-50	Strong Trend
-50-75	Very Strong Trend
-75-100	Extremely Strong Trend
+* 0-20	Absent or Weak Trend
+* 25-50	Strong Trend
+* 50-75	Very Strong Trend
+* 75-100	Extremely Strong Trend
 
 For example, a positive directional index (DMI+ > DMI-) and an ADX value of 45 indicates a strong uptrend. A negative directional index (DMI+ < DMI-) and an ADX value of 15 indicates a weak downtrend. 
 In this stock trend classification, the ADX and directional index are represented in one feature by multiplying the ADX by -1 if the directional index is negative (the DMI+ < DMI-); the ADX is kept positive if the directional index is positive (the DMI+ > DMI-). 
@@ -129,19 +129,19 @@ For the number of estimators, the best number of estimators is 520 estimators. H
 
 ![image](https://github.com/user-attachments/assets/7a424e0d-489f-4337-a6da-970a7ec51fa0)
 
-For the number of max features, the best parameter is found to be 16 features. This means that at every split, a subset of 16 should be taken from the total features. Using 16 increases the cv score to _, which is a _% improvement from the original cv score of 80.8%.
+For the number of max features, the best parameter is found to be 16 features. This means that at every split, a subset of all 16 features should be taken. Using 16 increases the cv score to 82.6%, which is a 1.8% improvement from the original cv score of 80.8%.
 
 ![image](https://github.com/user-attachments/assets/f0338fed-dd48-4d1f-8f0d-bf17711e8218)
 
-Re-initializing the model with the tuned parameters gives a new cv score of 
+Re-fitting the model with the tuned parameters gives a new cv score of 82.5%.
 
 ### Feature Importances 
 The feature importances reveal that RSI Z-Score, Z-Score, RSI, and ADX contributed the most to the model's accuracy, while Bollinger Bands lower bound, SMA, and Bollinger Bands upper bound contributed the least. This also means that the most prominent features reduced the Gini Index (promoted node purity) relatively more than the other features. 
 
-![image](https://github.com/user-attachments/assets/1f35c06e-40ce-4718-988b-bedcd6bcf841)
-
-![image](https://github.com/user-attachments/assets/0c2ed10d-9951-440a-b77f-f16a5677fd75)
-
+<p align="middle">
+  <img src="https://github.com/user-attachments/assets/0c2ed10d-9951-440a-b77f-f16a5677fd75">
+  <img src="https://github.com/user-attachments/assets/1f35c06e-40ce-4718-988b-bedcd6bcf841" width="600px">
+</p>
 
 
 
