@@ -49,7 +49,7 @@ Random Forest is also black box. It's not feasible to see the different branches
 Now that we've covered the basics of how Random Forest works, I can discuss the specifics of this implementation.
 
 ## Dataset
-The dataset used to train and test the model was sourced from Python's YFinance library with historical and most recent data on open, high, low, close, volume, and adjusted close prices for the S&P500 index to capture patterns consistent with the top 500 traded stocks in the United States. This included X rows and 7 columns. 
+The dataset used to train and test the model was sourced from Python's YFinance library with historical and most recent data on open, high, low, close, volume, and adjusted close prices for the S&P500 index to capture patterns consistent with the top 500 traded stocks in the United States. This included 9909 rows and 7 columns. 
 
 The training data is labeled with a 5-day lagged close price to simulate conditions for the moderately active home investor. If P(i) represents the most recent close on the i-th day then:
 
