@@ -144,6 +144,7 @@ The feature importances reveal that RSI Z-Score, Z-Score, RSI, and ADX contribut
   <img src="https://github.com/user-attachments/assets/1f35c06e-40ce-4718-988b-bedcd6bcf841" width="600px">
 </p>
 
+## Conclusion
+The overall performance of the Random Forest Classification is ideal with a cv score of about 82.5%. Compared to other algorithmic models such as Support Vector Machines that can reach accuracies of up to 90%, Random Forest performs adequately well considering that it's highly interpetable and takes less time to train. 
 
-
-
+As the model was trained on S&P500 data, the feature importance reflects that RSI and ADX features are highly indicative of stock market patterns and trends when generalized to a diverse range of stocks from different sectors. This makes intuitive sense because RSI is primarily a momentum indicator, providing information on the direction and extent of price movement, and ADX provides information on the quantified strength of a trend in any direction. In practice, these two indicators are often used in conjunction to verify potentially true signals or identify false signals. However, it is surprising that MACD features didn't contribute more to the overall accuracy of the model considering its popularity as a technical indicator. With even more nuanced feature engineering, these results could definitely evolve and better the model's performance.
