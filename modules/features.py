@@ -110,15 +110,6 @@ def test_train(features_df, split_level):
     xTest = xTest.drop(["Close Trend"], axis = 1)
     return xTrain, yTrain, xTest, yTest
 
-def calc_vix():
-    vix = yf.Ticker("^VIX")
-    vix_data = vix.history(period="max")
-    vix_data = vix_data.drop(["Volume", "Dividends", "Stock Splits"], axis = 1)
-    vix_data.reset_index(inplace=True)
-    vix_data["Date"] = pd.to_datetime(vix_data["Date"]).dt.tz_localize(None).dt.normalize()
-    vix_data = vix_data.set_axis(["Date", "Vix Open", "Vix High", "Vix Low", "Vix Close"], axis=1)
-    return vix_data
-
 def predict(ticker, RF): 
     ticker_pred = yf.Ticker(ticker)
     today = ticker_pred.history(period="3mo").reset_index()
