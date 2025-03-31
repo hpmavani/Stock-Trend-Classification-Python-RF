@@ -116,32 +116,32 @@ Confusion matrices summarize the performance of a classification algorithm by sh
 * False Positives = This is the number of incorrect uptrend predictions. (112)
 * False Negatives = This is the number of incorrect downtrend predictions. (184)
 
-![image](https://github.com/user-attachments/assets/69767355-abfc-43f2-9313-88b049bed414)
+![image](https://github.com/user-attachments/assets/39691d77-789e-4822-acf4-4fd074375f97)
 
 ### Accuracy, F1-Score, Precision, and Recall 
 The results of the Random Forest model's performance were evaluated using accuracy, f1-score, precision, and recall. These are directly calculated from the outcomes of the confusion matrix above.
 
-![image](https://github.com/user-attachments/assets/8629e7d3-94ee-4db8-a3c7-5d7b1f53a366)
+![image](https://github.com/user-attachments/assets/9d8aae84-e9a6-41b7-b9b7-8f0f2aa84407)
 
 ### Cross-Validation and Hyperparameter Tuning 
-The cv (Cross-Validation) score is also considered, which indicates a mean accuracy of 80.8% indicating that the accuracy metric was a little optimistic. We can try to increase this score further through hyperparameter tuning using gridsearchCV, specifically with the number of estimators (number of trees) and the maximum amount of features to select from at each split. 
+The cv (Cross-Validation) score is also considered, which indicates a mean accuracy of 86.4% indicating that there likely isn't much overfitting. However, we can try to increase this score further through hyperparameter tuning using gridsearchCV, specifically with the number of estimators (number of trees) and the maximum amount of features to select from at each split. 
 
-For the number of estimators, the best number of estimators is 520 estimators. However, this specific finding doesn't change the cv score by a signficant amount. 
+For the number of estimators, the best number of estimators is 880 estimators. However, this specific finding doesn't change the cv score by a signficant amount. 
 
-![image](https://github.com/user-attachments/assets/7a424e0d-489f-4337-a6da-970a7ec51fa0)
+![image](https://github.com/user-attachments/assets/f35d4035-73fe-4661-a07a-792f8d1392ca)
 
-For the number of max features, the best parameter is found to be 16 features. This means that at every split, a subset of all 16 features should be taken. Using 16 increases the cv score to 82.6%, which is a 1.8% improvement from the original cv score of 80.8%.
+For the number of max features, the best parameter is found to be 8 features. This means that at every split, a subset of 8 features should be taken. 
 
-![image](https://github.com/user-attachments/assets/f0338fed-dd48-4d1f-8f0d-bf17711e8218)
+![image](https://github.com/user-attachments/assets/d1dfc06a-bcb8-46c3-a455-e17faa4ffea4)
 
-Re-fitting the model with the tuned parameters gives a new cv score of 82.5%.
+Re-fitting the model with the tuned parameters (880 estimators and max features of 8) gives a new cv score of 86.7%, a 0.3% from the original cv score of 86.4. This different isn't very significant, so the time trade-off that would be required for training the random forest with 880 estimators isn't worth the small increase in cv. 
 
 ### Feature Importances 
 The feature importances reveal that RSI Z-Score, Z-Score, RSI, and ADX contributed the most to the model's accuracy, while Bollinger Bands lower bound, SMA, and Bollinger Bands upper bound contributed the least. This also means that the most prominent features reduced the Gini Index (promoted node purity) relatively more than the other features. 
 
 <p align="middle">
-  <img src="https://github.com/user-attachments/assets/0c2ed10d-9951-440a-b77f-f16a5677fd75">
-  <img src="https://github.com/user-attachments/assets/1f35c06e-40ce-4718-988b-bedcd6bcf841" width="600px">
+  <img src="https://github.com/user-attachments/assets/d41328fd-ce1c-48ce-a9c2-e0eed87a00d2">
+  <img src="https://github.com/user-attachments/assets/5a853d97-e6d6-404c-8584-5335ae0a9ed0" width="600px">
 </p>
 
 ## Conclusion
